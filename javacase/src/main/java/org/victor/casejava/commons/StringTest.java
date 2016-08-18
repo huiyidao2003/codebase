@@ -22,4 +22,47 @@ public class StringTest {
 
         System.out.println(to);
     }
+
+    /**计算字符串sub在字符串str中出现的次数**/
+    @Test
+    public void matchesCount(){
+        int a1 = StringUtils.countMatches(null, "*"); // *号代表，任意字符
+        int a2 = StringUtils.countMatches("", "*");   // *号代表，任意字符
+        int a3 = StringUtils.countMatches("asdf","as");
+        int a4 = StringUtils.countMatches("asdfas","as");
+        int a5 = StringUtils.countMatches("dfgh","as");
+        int a6 = StringUtils.countMatches("as","");
+        int a7 = StringUtils.countMatches("as",null);
+
+        System.out.println(a1);
+        System.out.println(a2);
+        System.out.println(a3);
+        System.out.println(a4);
+        System.out.println(a5);
+        System.out.println(a6);
+        System.out.println(a7);
+    }
+
+    /**判断某字符串是否为空，为空的标准是str == null 或 str.length() == 0**/
+    @Test
+    public void isEmpty(){
+        System.out.println(StringUtils.isEmpty(null));
+        System.out.println(StringUtils.isEmpty(""));
+        System.out.println(StringUtils.isEmpty("  "));
+        System.out.println(StringUtils.isEmpty("        "));
+        System.out.println(StringUtils.isEmpty("bob"));
+        System.out.println(StringUtils.isEmpty(" bob "));
+    }
+
+
+
+
+    /**把字符串中的字符大写转换为小写，小写转换为大写 ,字符串大小写反转**/
+    @Test
+    public void swapCase(){
+        System.out.println(StringUtils.swapCase(null));
+        System.out.println(StringUtils.swapCase(""));
+        System.out.println(StringUtils.swapCase("Hello Boys"));
+        System.out.println(StringUtils.swapCase("I am 11"));
+    }
 }
