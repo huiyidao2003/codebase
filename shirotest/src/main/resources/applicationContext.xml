@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:p="http://www.springframework.org/schema/p"
+		xmlns:context="http://www.springframework.org/schema/context"
+		xmlns:aop="http://www.springframework.org/schema/aop"
+		xmlns:tx="http://www.springframework.org/schema/tx"
+		xmlns:util="http://www.springframework.org/schema/util"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans
+			http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+			http://www.springframework.org/schema/context
+			http://www.springframework.org/schema/context/spring-context-3.2.xsd
+			http://www.springframework.org/schema/tx
+			http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+			http://www.springframework.org/schema/aop
+			http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+			http://www.springframework.org/schema/util
+			http://www.springframework.org/schema/util/spring-util-3.2.xsd"> 
+			
+ 	<!--<context:component-scan base-package="org.victor.kingmis.service"/>-->
+ 	
+<!--	<bean id="propertyConfiger" class="org.springframework.beans.factory.config.PropertyOverrideConfigurer"
+		p:location="classpath:db.properties"/>
+
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close"
+		p:driverClass="${dataSource.driverClass}"
+		p:jdbcUrl="${dataSource.jdbcUrl}"
+		p:user="${dataSource.user}"
+		p:password="${dataSource.password}"/>
+ 
+ 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"
+ 		p:dataSource-ref="dataSourceProxy"
+ 		p:configLocation="classpath:sqlmaps.xml"/>
+
+	 <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"
+	        p:basePackage="com.lkg.oa.framework.dao"
+	        p:sqlSessionFactoryBeanName="sqlSessionFactory"/>
+
+                                
+	<bean id="dataSourceProxy" class="org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy">
+		<constructor-arg>
+			<ref bean="dataSource" />
+		</constructor-arg>
+	</bean>
+
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSourceProxy"></property>
+	</bean>
+	
+	<bean id="nativeJdbcExtractor" class="org.springframework.jdbc.support.nativejdbc.C3P0NativeJdbcExtractor"  lazy-init="true"/>
+	
+	<tx:advice id="serviceAdvice" transaction-manager="transactionManager">  
+	    <tx:attributes>  
+	        <tx:method name="get*" propagation="REQUIRED" rollback-for="Throwable"/>  
+	        <tx:method name="save*" propagation="REQUIRED" rollback-for="Throwable"/>  
+	        <tx:method name="insert*" propagation="REQUIRED" rollback-for="Throwable"/>  
+	        <tx:method name="delete*" propagation="REQUIRED" rollback-for="Throwable"/>  
+	        <tx:method name="update*" propagation="REQUIRED" rollback-for="Throwable"/>  
+	        <tx:method name="*" read-only="true"/>  
+	    </tx:attributes>
+    </tx:advice>  
+    <aop:config proxy-target-class="true">  
+       <aop:pointcut id="servicePointcut" expression="execution(* org.victor.kingmis.service.*.*(..))"/>
+       <aop:advisor pointcut-ref="servicePointcut" advice-ref="serviceAdvice"/>  
+    </aop:config>-->
+
+</beans>
