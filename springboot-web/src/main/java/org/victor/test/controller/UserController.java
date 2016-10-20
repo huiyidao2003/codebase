@@ -91,6 +91,13 @@ public class UserController {
 
         return String.valueOf(list != null?list.size():null);
     }
+    @RequestMapping("/list_like")
+    String list_like(){
+        String txt = "张";
+        List<Map<String,Object>> list = userRepository.getListByLike(txt);
+
+        return String.valueOf(list != null?list.size():null);
+    }
 
 
 }

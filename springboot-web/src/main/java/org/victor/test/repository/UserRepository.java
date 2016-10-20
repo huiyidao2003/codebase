@@ -152,7 +152,13 @@ public class UserRepository extends BaseRepository{
         namedParameterJdbcTemplate.update(sql,param);
     }
 
+    public List<Map<String,Object>> getListByLike(String txt){
+        String sql = "select * from t_user where name like '%" + txt +"%'";
+        Map<String,String> param = new HashMap<String,String>();
+        param.put("txt",txt);
 
+        return this.namedParameterJdbcTemplate.query(sql,param,new ColumnMapRowMapper());
+    }
 
 
 }
