@@ -3,7 +3,6 @@ package org.victor.casejava.poi;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.Diff;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -22,56 +21,41 @@ import java.util.Map;
  * 测试处理临时的问题
  * Created by zhengcunwen on 2016/8/25.
  */
-public class PoiTest3 {
+public class PoiTest4 {
 
 
     /**poi读取excel，导出**/
     public static void getExcel(){
-        List<String> uids = Lists.newArrayList(
-                "wq1480926369992bj40670390andczukw",
-                "wq1481022314058bj10722973iosczukw",
-                "wq1481088010648bj60998084andczukw",
-                "wq1481435909634bj34502796iosczukw",
-                "wq1481535406333bj67527377andczukw"
 
-        );
+        String path = "e:\\signed_12m.xlsx";
 
 
-        String path = "e:\\xingtan_detail.xlsx";
+        Map<String,String> waquMap = getExcel_waquId();
+        Map<String,String> nameMap = getExcel_agentName();
+
         try {
             InputStream is = new FileInputStream(path);
 
             XSSFWorkbook xssfWorkbook = new XSSFWorkbook(is);
-
-
-            Map<String,Pair<BigDecimal,BigDecimal>> sheetMap = Maps.newHashMap();
-            XSSFSheet xssfSheet1 = xssfWorkbook.getSheetAt(5);
+            XSSFSheet xssfSheet1 = xssfWorkbook.getSheetAt(0);
             for (int rowNum = 1; rowNum <= xssfSheet1.getLastRowNum(); rowNum++) {
                 XSSFRow xssfRow = xssfSheet1.getRow(rowNum);
                 if (xssfRow != null) {
-                    String suid = getValue(xssfRow.getCell(0));
-                    String anchor_id = getValue(xssfRow.getCell(1));
-                    String wadiamond = getValue(xssfRow.getCell(4));
-                    String income = getValue(xssfRow.getCell(5));
+                    String uid = getValue(xssfRow.getCell(0));
 
-                    if(!sheetMap.containsKey(suid)){
-                        sheetMap.put(suid,Pair.of(new BigDecimal(wadiamond),new BigDecimal(income)));
+                    String waquid = null;
+                    if(waquMap.containsKey(uid)){
+                        waquid = waquMap.get(uid);
                     }else{
-                        Pair<BigDecimal,BigDecimal> temp = sheetMap.get(suid);
-                        BigDecimal left = temp.getLeft();
-                        BigDecimal right = temp.getRight();
-
-                        sheetMap.put(suid, Pair.of(left.add(new BigDecimal(wadiamond)), right.add(new BigDecimal(income))));
+                        System.out.println("----------------" + uid);
                     }
+                    String name = null;
+                    if(nameMap.containsKey(uid)){
+                        name = nameMap.get(uid);
+                    }
+                    System.out.println(waquid + "\t" + name);
                 }
             }
-
-            for (Map.Entry<String,Pair<BigDecimal,BigDecimal>> entry:sheetMap.entrySet()){
-                Pair<BigDecimal,BigDecimal> temp = entry.getValue();
-                System.out.println(xssfSheet1.getSheetName() + "\t" + entry.getKey() + "\t" + temp.getRight());
-            }
-
-
 
 
         } catch (FileNotFoundException e) {
@@ -80,6 +64,63 @@ public class PoiTest3 {
             e.printStackTrace();
         }
     }
+
+    public static Map<String,String> getExcel_waquId(){
+
+        String path = "e:\\agent_waqu.xlsx";
+        Map<String,String> roomIdMap = Maps.newHashMap();
+        try {
+            InputStream is = new FileInputStream(path);
+
+            XSSFWorkbook xssfWorkbook = new XSSFWorkbook(is);
+            XSSFSheet xssfSheet1 = xssfWorkbook.getSheetAt(0);
+
+
+            for (int rowNum = 0; rowNum <= xssfSheet1.getLastRowNum(); rowNum++) {
+                XSSFRow xssfRow = xssfSheet1.getRow(rowNum);
+                if (xssfRow != null) {
+                    String uid = getValue(xssfRow.getCell(0));
+                    String room_id = getValue(xssfRow.getCell(1));
+
+                    roomIdMap.put(uid,room_id);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return roomIdMap;
+    }
+
+    public static Map<String,String> getExcel_agentName(){
+
+        String path = "e:\\agent_name.xlsx";
+        Map<String,String> map = Maps.newHashMap();
+        try {
+            InputStream is = new FileInputStream(path);
+
+            XSSFWorkbook xssfWorkbook = new XSSFWorkbook(is);
+            XSSFSheet xssfSheet1 = xssfWorkbook.getSheetAt(0);
+
+
+            for (int rowNum = 0; rowNum <= xssfSheet1.getLastRowNum(); rowNum++) {
+                XSSFRow xssfRow = xssfSheet1.getRow(rowNum);
+                if (xssfRow != null) {
+                    String uid = getValue(xssfRow.getCell(0));
+                    String name = getValue(xssfRow.getCell(1));
+
+                    map.put(uid,name);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return map;
+    }
+
 
     public static void writeNickname(){
         String path = "e:\\temp1.xlsx";
