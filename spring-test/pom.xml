@@ -7,10 +7,26 @@
     <artifactId>spring-test</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
+    <properties>
+        <org.springframework.version>3.2.18.RELEASE</org.springframework.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
     <!-- Additional lines to be added here... -->
     <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+        </dependency>
+        <!-- spring start -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+            <version>${org.springframework.version}</version>
+        </dependency>
 
+        <!-- spring end -->
     </dependencies>
 
 </project>
