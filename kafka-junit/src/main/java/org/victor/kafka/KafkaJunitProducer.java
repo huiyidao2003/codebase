@@ -4,8 +4,8 @@ import kafka.javaapi.producer.Producer;
 import kafka.producer.KeyedMessage;
 import kafka.producer.ProducerConfig;
 
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -20,10 +20,12 @@ public class KafkaJunitProducer{
     /**
      * 初始化配置
      */
-    public void init(){
+    public void initConfig(String path){
         prop =  new  Properties();
-        InputStream in = Object.class .getResourceAsStream( "/kafka.properties" );
+        //InputStream in = KafkaJunitProducer.class .getResourceAsStream( "/producer.properties" );
         try  {
+            // 读配置文件的绝对路径
+            FileInputStream in = new FileInputStream(path);
             prop.load(in);
         }  catch  (IOException e) {
             e.printStackTrace();
@@ -34,7 +36,6 @@ public class KafkaJunitProducer{
      * 发送topic
      */
     public void sendTopic(){
-        init();
         ProducerConfig config = new ProducerConfig(prop);
         Producer<String, String> producer = new Producer<String, String>(config);
 
@@ -54,6 +55,13 @@ public class KafkaJunitProducer{
     }
 
     public static void main(String[] args) {
-        new KafkaJunitProducer().sendTopic();
+        if(args.length != 1){
+            System.out.println("main args error: must a producer.properties");
+            System.exit(0);
+        }
+
+        KafkaJunitProducer producer = new KafkaJunitProducer();
+        producer.initConfig(args[0]);
+        producer.sendTopic();
     }
 }

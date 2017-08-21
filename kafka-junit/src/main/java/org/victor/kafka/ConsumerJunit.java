@@ -5,6 +5,8 @@ import kafka.consumer.ConsumerIterator;
 import kafka.consumer.KafkaStream;
 import kafka.javaapi.consumer.ConsumerConnector;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,26 +19,41 @@ public class ConsumerJunit extends Thread{
 
     private final ConsumerConnector consumer;
     private final String topic;
+    private Properties props;
 
     public static void main(String[] args) {
-        ConsumerJunit consumerThread = new ConsumerJunit("my-replicated-topic5");
+        if(args.length != 1){
+            System.out.println("main args error: must a consumer.properties");
+            System.exit(0);
+        }
+
+        ConsumerJunit consumerThread = new ConsumerJunit("my-replicated-topic5",args[0]);
         consumerThread.start();
     }
-    public ConsumerJunit(String topic) {
-        consumer =kafka.consumer.Consumer.createJavaConsumerConnector(createConsumerConfig());
-        this.topic =topic;
+    public ConsumerJunit(String topic,String configPath) {
+        initConfig(configPath);
+        consumer = kafka.consumer.Consumer.createJavaConsumerConnector(createConsumerConfig());
+        this.topic = topic;
+
     }
 
-    private static ConsumerConfig createConsumerConfig() {
-        Properties props = new Properties();
-        // 设置zookeeper的链接地址
-        props.put("zookeeper.connect","d1.datammd.com:2181");
-        //props.put("zookeeper.connect","kafka:2181");
-        // 设置group id
-        props.put("group.id", "1");
-        // kafka的group 消费记录是保存在zookeeper上的, 但这个信息在zookeeper上不是实时更新的, 需要有个间隔时间更新
-        props.put("auto.commit.interval.ms", "1000");
-        props.put("zookeeper.session.timeout.ms","10000");
+    /**
+     * 初始化配置
+     */
+    public void initConfig(String configPath){
+        props =  new  Properties();
+        //InputStream in = KafkaJunitProducer.class .getResourceAsStream( "/producer.properties" );
+        try  {
+            // 读配置文件的绝对路径
+            FileInputStream in = new FileInputStream(configPath);
+            props.load(in);
+        }  catch  (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private ConsumerConfig createConsumerConfig() {
         return new ConsumerConfig(props);
     }
 
@@ -47,8 +64,9 @@ public class ConsumerJunit extends Thread{
         Map<String, List<KafkaStream<byte[],byte[]>>>  streamMap=consumer.createMessageStreams(topickMap);
 
         KafkaStream<byte[],byte[]>stream = streamMap.get(topic).get(0);
-        ConsumerIterator<byte[],byte[]> it =stream.iterator();
+        ConsumerIterator<byte[],byte[]> it = stream.iterator();
         System.out.println("*********Results********");
+
         while(it.hasNext()){
             System.err.println("-----------------------------------get data:" +new String(it.next().message()));
             try {
